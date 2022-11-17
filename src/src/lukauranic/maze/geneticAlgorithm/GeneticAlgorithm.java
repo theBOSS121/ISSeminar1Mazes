@@ -41,7 +41,7 @@ public class GeneticAlgorithm {
 			}			
 		}
 		
-		int populationSize = 10000;
+		int populationSize = 10;
 		generatePopulation(populationSize, maxChromosomeLength);
 	}
 	
@@ -115,7 +115,7 @@ public class GeneticAlgorithm {
 			List<Vec2> intersections = new ArrayList<Vec2>();
 			for(int j = 0; j < parent1.path.length; j++) {
 				for(int k = 0; k < parent2.path.length; k++) {
-					if(parent1.path[j].eq(parent2.path[k])) intersections.add(new Vec2(j, k));
+					if(parent1.path[j].equals(parent2.path[k])) intersections.add(new Vec2(j, k));
 				}
 			}
 			int[] moves = null;
@@ -165,6 +165,26 @@ public class GeneticAlgorithm {
 		population = children;
 	}
 	
+	public void simpleRandomCrossover() {
+		int startIndex = population.size() * elitism / 100;
+		List<Chromosome> children = new ArrayList<>();
+		for(int i = 0; i < startIndex; i++) {
+			children.add(population.get(i));			
+		}
+		for(int i = 0; i < selectionIndexes.length; i++) {
+			Chromosome parent1 = population.get(selectionIndexes[i].x);
+			Chromosome parent2 = population.get(selectionIndexes[i].y);
+			int randParent = rand.nextInt(2);
+			if(randParent == 0) {
+				children.add(new Chromosome(parent1.moves, maxChromosomeLength, maze, start, end, tressures, width, height));				
+			}else {
+				children.add(new Chromosome(parent2.moves, maxChromosomeLength, maze, start, end, tressures, width, height));
+			}
+			
+		}
+		population = children;
+	}
+		
 	public void mutate() {
 		int startIndex = population.size() * elitism / 100;
 		for(int i = startIndex; i < population.size(); i++) {
@@ -180,6 +200,7 @@ public class GeneticAlgorithm {
 //		selectionRandomly();
 		selectionLinearlyBiased();
 //		crossover();
+		simpleRandomCrossover();
 		mutate();
 
 //		System.out.println("Generation: " + Chromosome.generation + ", " + population.get(0).toString());
@@ -188,11 +209,11 @@ public class GeneticAlgorithm {
 	}
 
 	public void render() {
-		for(int i = 0; i < 1; i++) {
-//			System.out.println(population.get(i).fitness);
+		for(int i = 0; i < population.size(); i++) {
 //			population.get(i).render();
 		}
-		for(int i = 0; i < population.size(); i++) {
+		for(int i = 0; i < 1; i++) {
+//			System.out.println(population.get(i).fitness);
 			population.get(i).render();
 		}
 	}

@@ -74,6 +74,7 @@ public class Maze extends Canvas implements Runnable {
 					}
 				}
 			}
+			maxChromosomeLength = width * height - 1;
 		}		
 		
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -174,11 +175,26 @@ public class Maze extends Canvas implements Runnable {
 	
 	public static void main(String[] args) {
 		String[] mazeString = {
-				"##E##",
-		          "#...#",
-		          "#...#",
-		          "#S..#",
-		          "#####"
+				"####################",
+		          "#..................#",
+		          "#.##############.###",
+		          "#.########.......###",
+		          "#.#.T......######..#",
+		          "#.##.##.##........##",
+		          "#.#...#.##.######.##",
+		          "#.###.#.##....T##.##",
+		          "#.###..##########.##",
+		          "#.####.###.........#",
+		          "#.#....#...####.####",
+		          "#.#.####.####.....##",
+		          "#.#......#......####",
+		          "#.###.####.#####...#",
+		          "#.#T.....#.....#.###",
+		          "#.######...#####.#.#",
+		          "#.#.....##S....#.#.#",
+		          "#.#########..#...T.#",
+		          "#..........###.##.##",
+		          "##########E#########"
 		};		
 		Maze m = new Maze(mazeString);
 		m.frame.setResizable(false);

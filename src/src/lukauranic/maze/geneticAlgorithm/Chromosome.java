@@ -1,8 +1,10 @@
 package src.lukauranic.maze.geneticAlgorithm;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import src.lukauranic.maze.Maze;
 import src.lukauranic.maze.util.Vec2;
@@ -30,7 +32,10 @@ public class Chromosome implements Comparable<Chromosome>{
 		this.end = end;
 		this.tressures = tressures;
 		this.maxChromosomeLength = maxChromosomeLength;
-		this.moves = moves;
+		this.moves = new int[moves.length];
+		for(int i = 0; i < this.moves.length; i++) {
+			this.moves[i] = moves[i];
+		}
 		
 		int r = rand.nextInt(16);
 		color = 0xff << 16 | r << 12 | r << 8;		
@@ -69,6 +74,7 @@ public class Chromosome implements Comparable<Chromosome>{
 		int numberOfTimesThroughWall = 0;
 		int numberOfThressures = 0;
 		List<Vec2> tressuresOnPath = new ArrayList<>();
+
 		for(int i = 0; i < path.length; i++) {
 			if(path[i].x < 0 || path[i].y < 0 || path[i].x >= width || path[i].y >= height || maze[path[i].x + path[i].y * width] == -1) { // wall or out of maze
 				numberOfTimesThroughWall++;
@@ -87,6 +93,7 @@ public class Chromosome implements Comparable<Chromosome>{
 				}
 			}
 		}
+				
 		
 		int wallPenalty = maxChromosomeLength;
 		int distanceToEndPenalty = maxChromosomeLength/4;
@@ -112,45 +119,90 @@ public class Chromosome implements Comparable<Chromosome>{
 //		printMoves();
 		Vec2 curr = new Vec2(path[index].x, path[index].y);
 		boolean moved = false;
+		boolean skipBackMove = false;
+		int backMoveSkipFirstTimeProb = 90;
+		int backMoveSkipNotFirstTimeProb = 70;
 		for(int i = index; i < moves.length; i++) {
 			moved = false;
+			skipBackMove = false;
 			int dir = moves[i];
 			if(dir == 0 && maze[curr.x-1 + curr.y * width] != -1) {
-				moves[i] = dir;
-				curr.x--;
-				moved = true;
+				if(i > 0 && moves[i-1] == 1) {
+					if(rand.nextInt(100) < backMoveSkipFirstTimeProb) skipBackMove = true;
+				}
+				if(!skipBackMove) {
+					moves[i] = dir;
+					curr.x--;
+					moved = true;					
+				}
 			}else if(dir == 1 && maze[curr.x+1 + curr.y * width] != -1) {
-				moves[i] = dir;
-				curr.x++;
-				moved = true;
+				if(i > 0 && moves[i-1] == 0) {
+					if(rand.nextInt(100) < backMoveSkipFirstTimeProb) skipBackMove = true;
+				}
+				if(!skipBackMove) {
+					moves[i] = dir;
+					curr.x++;
+					moved = true;
+				}
 			}else if(dir == 2 && maze[curr.x + (curr.y-1) * width] != -1) {
-				moves[i] = dir;
-				curr.y--;
-				moved = true;
+				if(i > 0 && moves[i-1] == 3) {
+					if(rand.nextInt(100) < backMoveSkipFirstTimeProb) skipBackMove = true;
+				}
+				if(!skipBackMove) {
+					moves[i] = dir;
+					curr.y--;
+					moved = true;
+				}
 			}else if(dir == 3 && maze[curr.x + (curr.y+1) * width] != -1) {
-				moves[i] = dir;
-				curr.y++;
-				moved = true;
+				if(i > 0 && moves[i-1] == 2) {
+					if(rand.nextInt(100) < backMoveSkipFirstTimeProb) skipBackMove = true;
+				}
+				if(!skipBackMove) {
+					moves[i] = dir;
+					curr.y++;
+					moved = true;
+				}
 			}
 						
 			while(!moved) {
+				skipBackMove = false;
 				dir = rand.nextInt(4);
 				if(dir == 0 && maze[curr.x-1 + curr.y * width] != -1) {
-					moves[i] = dir;
-					curr.x--;
-					break;
+					if(i > 0 && moves[i-1] == 1) {
+						if(rand.nextInt(100) < backMoveSkipNotFirstTimeProb) skipBackMove = true;
+					}
+					if(!skipBackMove) {
+						moves[i] = dir;
+						curr.x--;
+						break;
+					}
 				}else if(dir == 1 && maze[curr.x+1 + curr.y * width] != -1) {
-					moves[i] = dir;
-					curr.x++;
-					break;
+					if(i > 0 && moves[i-1] == 0) {
+						if(rand.nextInt(100) < backMoveSkipNotFirstTimeProb) skipBackMove = true;
+					}
+					if(!skipBackMove) {
+						moves[i] = dir;
+						curr.x++;
+						break;
+					}
 				}else if(dir == 2 && maze[curr.x + (curr.y-1) * width] != -1) {
-					moves[i] = dir;
-					curr.y--;
-					break;
+					if(i > 0 && moves[i-1] == 3) {
+						if(rand.nextInt(100) < backMoveSkipNotFirstTimeProb) skipBackMove = true;
+					}
+					if(!skipBackMove) {
+						moves[i] = dir;
+						curr.y--;
+						break;
+					}
 				}else if(dir == 3 && maze[curr.x + (curr.y+1) * width] != -1) {
-					moves[i] = dir;
-					curr.y++;
-					break;
+					if(i > 0 && moves[i-1] == 2) {
+						if(rand.nextInt(100) < backMoveSkipNotFirstTimeProb) skipBackMove = true;
+					}
+					if(!skipBackMove) {
+						moves[i] = dir;
+						curr.y++;
+						break;
+					}
 				}
 			}
 			if(curr.x == end.x && curr.y == end.y) {
