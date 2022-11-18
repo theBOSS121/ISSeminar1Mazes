@@ -110,6 +110,38 @@ public class Chromosome implements Comparable<Chromosome>{
 		calculateFitness();
 	}
 	
+	public void mutateUnNecessaryMoves() {
+		boolean somethingUseful = false;
+		Vec2 skip = null;
+		for(int i = 0; i < path.length-1; i++) {
+			somethingUseful = false;
+			for(int j = i+1; j < path.length; j++) {
+				if(path[j].equals(end)) somethingUseful = true;
+				if(tressures != null) {
+					for(int t = 0; t < tressures.length; t++) {
+						if(path[j].equals(tressures[t])) somethingUseful = true;
+					}
+				}
+				if(path[i].equals(path[j]) && !somethingUseful) {
+					skip = new Vec2(i, j);
+					break;
+				}
+			}
+			if(skip != null) break;
+		}
+		if(skip != null) {
+			int[] temp = moves;
+			moves = new int[moves.length - (skip.y-skip.x)];
+			for(int i = 0; i < moves.length; i++) {
+				if(i < skip.x) {
+					moves[i] = temp[i];					
+				}else {
+					moves[i] = temp[i+skip.y-skip.x];
+				}
+			}
+		}
+	}
+	
 	public void mutateAvoidWalls() { // mutates random index of a move to a new random move and corrects path afterwards
 		if(moves.length == 0) return;
 		int index = rand.nextInt(moves.length);
@@ -122,6 +154,10 @@ public class Chromosome implements Comparable<Chromosome>{
 		boolean skipBackMove = false;
 		int backMoveSkipFirstTimeProb = 90;
 		int backMoveSkipNotFirstTimeProb = 70;
+		if(tressures == null || tressures.length == 0) {
+			backMoveSkipFirstTimeProb = 99; // to avoid while true (probably not a great solution)
+			backMoveSkipNotFirstTimeProb = 99;
+		}
 		for(int i = index; i < moves.length; i++) {
 			moved = false;
 			skipBackMove = false;

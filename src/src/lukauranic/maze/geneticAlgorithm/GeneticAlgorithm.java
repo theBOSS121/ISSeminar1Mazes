@@ -41,7 +41,7 @@ public class GeneticAlgorithm {
 			}			
 		}
 		
-		int populationSize = 10;
+		int populationSize = 1000;
 		generatePopulation(populationSize, maxChromosomeLength);
 	}
 	
@@ -191,6 +191,9 @@ public class GeneticAlgorithm {
 			if(rand.nextInt(100) < mutationProbability) { //mutate
 //				population.get(i).mutateRandomly();
 				population.get(i).mutateAvoidWalls();
+				if(population.get(i).path[population.get(i).path.length-1].equals(end)) {
+					population.get(i).mutateUnNecessaryMoves();					
+				}
 			}
 		}
 	}
@@ -203,8 +206,8 @@ public class GeneticAlgorithm {
 		simpleRandomCrossover();
 		mutate();
 
-//		System.out.println("Generation: " + Chromosome.generation + ", " + population.get(0).toString());
-//		population.get(0).printMoves();
+		System.out.println("Generation: " + Chromosome.generation + ", " + population.get(0).toString());
+		population.get(0).printMoves();
 		Chromosome.generation++;
 	}
 
