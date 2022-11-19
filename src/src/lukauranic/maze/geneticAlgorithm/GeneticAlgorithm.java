@@ -17,7 +17,7 @@ public class GeneticAlgorithm {
 	int width, height;
 	
 	
-	List<Chromosome> population;
+	public List<Chromosome> population;
 	Vec2[] selectionIndexes;
 	int maxChromosomeLength;
 	
@@ -47,9 +47,6 @@ public class GeneticAlgorithm {
 	
 	public void sortPopulationByFitness() { 
 		Collections.sort(population); 
-//		for(int i = 0; i < population.size(); i++) {
-//			System.out.println(population.get(i).fitness);
-//		}
 	}
 	
 	public void generatePopulation(int populationSize, int maxChromosomeLength) {
@@ -71,10 +68,6 @@ public class GeneticAlgorithm {
 			}
 			selectionIndexes[i] = new Vec2(parent1, parent2);				
 		}
-//		System.out.println("Indexes");
-//		for(int i = 0; i < selectionIndexes.length; i++) {
-//			System.out.println(selectionIndexes[i].x + ", " + selectionIndexes[i].y);
-//		}
 	}
 	
 	public void selectionLinearlyBiased() {
@@ -89,25 +82,17 @@ public class GeneticAlgorithm {
 		for(int i = 0; i < selectionIndexes.length; i++) {
 			parent1 = parent2;
 			while(parent1 == parent2) {
-				parent1 = population.size()-1 - (int) (1/2 + Math.sqrt(1 + 8 * rand.nextInt(sumFrom0ToN))/2);
-				parent2 = population.size()-1 - (int) (1/2 + Math.sqrt(1 + 8 * rand.nextInt(sumFrom0ToN))/2);
+				parent1 = population.size()-1-(int)(1/2+Math.sqrt(1+8*rand.nextInt(sumFrom0ToN))/2);
+				parent2 = population.size()-1-(int)(1/2+Math.sqrt(1+8*rand.nextInt(sumFrom0ToN))/2);
 			}
 			selectionIndexes[i] = new Vec2(parent1, parent2);				
 		}
-//		System.out.println("Indexes: (" + population.size() + ")");
-//		for(int i = 0; i < selectionIndexes.length; i++) {
-//			System.out.println(selectionIndexes[i].x + ", " + selectionIndexes[i].y);
-//		}
 	}	
 	
 	public void crossover() {
-//		System.out.println("Crossover");
 		int startIndex = population.size() * elitism / 100;
-//		System.out.println(selectionIndexes.length + " " + startIndex + ", " + population.size());
 		List<Chromosome> children = new ArrayList<>();
-		for(int i = 0; i < startIndex; i++) {
-			children.add(population.get(i));			
-		}
+		for(int i = 0; i < startIndex; i++) { children.add(population.get(i)); }
 		for(int i = 0; i < selectionIndexes.length; i++) {
 			Chromosome parent1 = population.get(selectionIndexes[i].x);
 			Chromosome parent2 = population.get(selectionIndexes[i].y);
@@ -126,7 +111,7 @@ public class GeneticAlgorithm {
 				moves = parent1.moves;
 			}else if(part1 == 1 && part2 == 1) {
 				moves = parent2.moves;
-			}else if(part1 == 0 && part2 == 1) { // posibility of to big length
+			}else if(part1 == 0 && part2 == 1) {
 				int length = intersections.get(randIntersection).x + parent2.moves.length-intersections.get(randIntersection).y;
 				length = Math.min(maxChromosomeLength, length);
 				moves = new int[length];
@@ -152,16 +137,7 @@ public class GeneticAlgorithm {
 				}
 			}
 			children.add(new Chromosome(moves, maxChromosomeLength, maze, start, end, tressures, width, height));
-			
-//			parent1.printMoves();
-//			parent2.printMoves();
-//			System.out.println("child: " + intersections.get(randIntersection).x + ", " + intersections.get(randIntersection).y + ", " + part1 + ", " + part2);
-//			children.get(children.size()-1).printMoves();
-//			for(int c = 0; c < children.size(); c++) {
-//				children.get(c).printMoves();
-//			}
 		}
-//		System.out.println("new populationm " + children.size() + ", " + population.size() );
 		population = children;
 	}
 	
@@ -176,9 +152,11 @@ public class GeneticAlgorithm {
 			Chromosome parent2 = population.get(selectionIndexes[i].y);
 			int randParent = rand.nextInt(2);
 			if(randParent == 0) {
-				children.add(new Chromosome(parent1.moves, maxChromosomeLength, maze, start, end, tressures, width, height));				
+				children.add(new Chromosome(parent1.moves, maxChromosomeLength, maze, start, end,
+						tressures, width, height));				
 			}else {
-				children.add(new Chromosome(parent2.moves, maxChromosomeLength, maze, start, end, tressures, width, height));
+				children.add(new Chromosome(parent2.moves, maxChromosomeLength, maze, start, end, 
+						tressures, width, height));
 			}
 			
 		}
@@ -212,9 +190,9 @@ public class GeneticAlgorithm {
 	}
 
 	public void render() {
-		for(int i = 0; i < population.size(); i++) {
+//		for(int i = 0; i < population.size(); i++) {
 //			population.get(i).render();
-		}
+//		}
 		for(int i = 0; i < 1; i++) {
 //			System.out.println(population.get(i).fitness);
 			population.get(i).render();

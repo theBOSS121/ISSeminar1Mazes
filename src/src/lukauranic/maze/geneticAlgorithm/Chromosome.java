@@ -21,7 +21,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	int[] maze;
 	int[] moves;
 	Vec2[] path;
-	int fitness = Integer.MIN_VALUE;
+	public int fitness = Integer.MIN_VALUE;
 	int maxChromosomeLength;
 	
 	public Chromosome(int[] moves, int maxChromosomeLength, int[] maze, Vec2 start, Vec2 end, Vec2[] tressures, int width, int height) {
@@ -76,7 +76,8 @@ public class Chromosome implements Comparable<Chromosome>{
 		List<Vec2> tressuresOnPath = new ArrayList<>();
 
 		for(int i = 0; i < path.length; i++) {
-			if(path[i].x < 0 || path[i].y < 0 || path[i].x >= width || path[i].y >= height || maze[path[i].x + path[i].y * width] == -1) { // wall or out of maze
+			if(path[i].x < 0 || path[i].y < 0 || path[i].x >= width || path[i].y >= height 
+					|| maze[path[i].x + path[i].y * width] == -1) { // wall or out of maze
 				numberOfTimesThroughWall++;
 				continue;
 			}
@@ -98,12 +99,16 @@ public class Chromosome implements Comparable<Chromosome>{
 		int wallPenalty = maxChromosomeLength;
 		int distanceToEndPenalty = maxChromosomeLength/4;
 		int tressureReward = maxChromosomeLength * 2;
-//		fitness = -distanceToEnd*distanceToEndPenalty - numberOfTimesThroughWall * wallPenalty - path.length;
-		fitness = -distanceToEnd*distanceToEndPenalty - numberOfTimesThroughWall * wallPenalty - path.length + numberOfThressures * tressureReward;
+		fitness = 
+				-distanceToEnd * distanceToEndPenalty 
+				-numberOfTimesThroughWall * wallPenalty 
+				-path.length 
+				+numberOfThressures * tressureReward;
 	}
 	
 
-	public void mutateRandomly() { // mutates random index of a move to a new random move
+	// mutates random index of a move to a new random move
+	public void mutateRandomly() { 
 		int index = rand.nextInt(moves.length);
 		moves[index] = rand.nextInt(4);
 		
@@ -142,13 +147,11 @@ public class Chromosome implements Comparable<Chromosome>{
 		}
 	}
 	
-	public void mutateAvoidWalls() { // mutates random index of a move to a new random move and corrects path afterwards
+	// mutates random index of a move to a new random move and corrects path afterwards
+	public void mutateAvoidWalls() { 
 		if(moves.length == 0) return;
 		int index = rand.nextInt(moves.length);
-//		System.out.println(index);
-//		printMoves();
 		moves[index] = rand.nextInt(4);
-//		printMoves();
 		Vec2 curr = new Vec2(path[index].x, path[index].y);
 		boolean moved = false;
 		boolean skipBackMove = false;
@@ -250,7 +253,6 @@ public class Chromosome implements Comparable<Chromosome>{
 				break;
 			}
 		}
-//		printMoves();
 		calculateFitness();
 	}
 	
@@ -307,6 +309,22 @@ public class Chromosome implements Comparable<Chromosome>{
 			System.out.print(moves[i]);
 		}
 		System.out.println();
+	}
+	public String getMovesString() {
+		String movesString = "";
+		int len = 0;
+		for(int i = 0; i < moves.length; i++) {
+			if(moves[i] == 0) movesString += "L";
+			else if(moves[i] == 1) movesString += "R";
+			else if(moves[i] == 2) movesString += "U";
+			else if(moves[i] == 3) movesString += "D";
+			len++;
+			if(len > 20) {
+				movesString += "\n";
+				len = 0;
+			}
+		}
+		return movesString;
 	}
 	public void printPath() {
 		System.out.println("Path: ");
