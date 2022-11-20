@@ -56,8 +56,8 @@
 \end{center}
 
 \section{Introduction}
-In the first seminar assignment, out goal was to use genetic algorithms to find a path out of a maze,
-represented as a vector of strings, where \# characters represent walls, . represent empty spaces, and
+In the first seminar assignment, out goal was to use genetic algorithm to find a path out of a maze,
+represented as a vector of strings, where \# character represents a wall, . represents empty space, and
 S and E represent the starting and ending points.
 You can move through the maze in four directions, left, right, up, and down. Out task was to create a function that will be able to find path
  as short as possible out of any maze represented in such a way.
@@ -68,7 +68,7 @@ Maze is represented as a vector/array of Strings and then gets transformed into 
 
 \includegraphics{stringToData}
 
-Solution is a sequence of moves to get from start position to end position (example: LUDUULDR). The solution representation is integers array where 0 means left, 1 means right, 2 means up and 3 means down.
+Solution is a sequence of moves to get from start position to end position (example: LUDUULDR). The solution representation is array of Integers where 0 means left, 1 means right, 2 means up and 3 means down.
 
 Fitness function calculates the fitness of a Chromosome. Chromosomes with a better fitness are more likely to survive and reproduce. Fitness function maximum is when distance to end position is 0, never goes through walls, the path is shortest possible and all thresures are on the path.
 
@@ -77,7 +77,7 @@ Fitness function calculates the fitness of a Chromosome. Chromosomes with a bett
 
 
 \section{Task 2,3 - Selection, crossover, mutations, initial population}
-My implementation of genetic algorithm (for solving maze problem):
+Our implementation of genetic algorithm (for solving maze problem):
 
 \subsection{Selection}
 \subsubsection{Random selection}
@@ -92,7 +92,7 @@ Randomly selects two parents, but parents with greater fitness have a bigger pro
 
 
 \subsubsection{Higher order biased selection}
-Randomly selects two parents, but parents with greater fitness have a bigger probabiliy to get selected (higer order biased distrobution). I didn't implement it, but different probability distributions might improve the algorithm.
+Randomly selects two parents, but parents with greater fitness have a bigger probabiliy to get selected (higer order biased distrobution). We didn't implement it, but different probability distributions might improve the algorithm.
 
 \subsection{Crossover}
 \subsubsection{Pick a random parent}
@@ -104,8 +104,8 @@ Picks a random parent to become a new child:
 \subsubsection{Intersections crossover}
 Go through all intersections between two parents paths than select a random intersection and build a new path like this: randomly select a path to the
 intersection from one of the parents, randomly select the path after intersection from one of the parents. With this method you have to be careful, 
-because not all the lengths of path are the same so you can easily get unexpected results. I implemented this method, but was computationaly to slow 
-and didn't work better than the randomly pick a parent so I decided to use that one insted.
+because not all the lengths of path are the same so you can easily get unexpected results. We implemented this method, but was computationaly to slow 
+and didn't work better than the randomly pick a parent so we decided to use that one insted.
 
 \subsection{Mutations}
 \subsubsection{Random mutation}
@@ -122,7 +122,7 @@ algorithm performance you should also make back moves less likely, so that a big
 \includegraphics[scale=1]{randomMovePathCorrectionMutation3}
 
 \subsubsection{Remove unneccesary moves}
-Goes through the path and checks if you the coordinate was already visited and no thresures were picked between visits. If that happens this part of the path
+Go through the path and check if the coordinate was already visited and no thresures were picked between visits. If that happens this part of the path
 is useless so it should be removed:
 
 \includegraphics[scale=1]{removeUnNeccesaryMovesMutation}
@@ -176,25 +176,25 @@ Selections: linearly biased selection works a lot better than a random selection
 Crossover: choosing a random parent works better than computing the intersections, because it is not computationaly expensive and mutations
 can make this behaviour very well and fast.
 
-Mutations: Combination of changing a random move along the path and then correcting next moves so that they don't go through walls woked best for me
+Mutations: Combination of changing a random move along the path and then correcting next moves so that they don't go through walls woked best for us
 with a mutation that removes unneccesary parts of the path (this mutation is only possible on chromosomes that make it to the end).
 
 Initial population generation: Initial population generation should be generated randomly and should take walls into account, because in that way a big part
 of a maze is searched in every generation (if mutations and crossovers have the same behaviour). Even better performance would be if back moves are less
 likely.
 
-Population size: I got the best results with initial population of size 1000. The number depands on the maze but bigger number means more of a maze will
+Population size: We got the best results with initial population of size 1000. The number depends on the maze but bigger number means more of a maze will
 be searched in first generation and thus the algorithm is more likely to converge faster. But too big number means every generation will be computed slower
 so the "good" mutations will take more time to appear.
 
-Elitism: 10 percent seems to be a good number. To small percentage might meen a very good candidate will get mutated and lost. Too big percentage will 
-make algorithm slower and is not be neccessary so it means we are wasting memory.
+Elitism: 10 percent seems to be a good number. To small percentage might mean a very good candidate will get mutated and lost. Too big percentage will 
+make algorithm slower and is not neccessary so it means we are wasting memory.
 
-Mutation probability: 30 percent gave me good results. We don't want to mutate with too big percentage because than all the data gained from genrations
+Mutation probability: 30 percent gave us a good results. We don't want to mutate with too big percentage because than all the data gained from genrations
 will be lost. But too small of a percentage will make local maximums harder to avoid.
 
-Back move probability: If a maze has no tresasures back moves should be avoided so the probability of back moves should be 0 (in my implementation
-of the algorithm it is 1 percent so that I don't have to change the chromosome length when a dead end is found). If a maze contains tressures, I got very
+Back move probability: If a maze has no tresasures back moves should be avoided so the probability of back moves should be 0 (in our implementation
+of the algorithm it is 1 percent so that we don't have to change the chromosome length when a dead end is found). If a maze contains tressures, we got very
 good results with 10 percent probability to allow back move on a first try and 30 percent on every subsequent try.
 
 Note: The results will vary and are hard to evaluate based on one try, because algorithm uses randomness.
