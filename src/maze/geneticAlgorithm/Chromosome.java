@@ -1,4 +1,4 @@
-package src.lukauranic.maze.geneticAlgorithm;
+package maze.geneticAlgorithm;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import src.lukauranic.maze.Maze;
-import src.lukauranic.maze.util.Vec2;
+import maze.Maze;
+import maze.util.Vec2;
 
 public class Chromosome implements Comparable<Chromosome>{
 	public static int generation = 0;

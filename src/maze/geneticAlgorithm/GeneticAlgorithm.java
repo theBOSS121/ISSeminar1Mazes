@@ -1,11 +1,11 @@
-package src.lukauranic.maze.geneticAlgorithm;
+package maze.geneticAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import src.lukauranic.maze.util.Vec2;
+import maze.util.Vec2;
 
 public class GeneticAlgorithm {
 	private Random rand = new Random();	

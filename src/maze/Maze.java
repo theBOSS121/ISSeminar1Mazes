@@ -1,4 +1,4 @@
-package src.lukauranic.maze;
+package maze;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -12,12 +12,10 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
-import src.lukauranic.maze.geneticAlgorithm.Chromosome;
-import src.lukauranic.maze.geneticAlgorithm.GeneticAlgorithm;
-import src.lukauranic.maze.graphics.Screen;
-import src.lukauranic.maze.input.Keyboard;
-import src.lukauranic.maze.input.Mouse;
-import src.lukauranic.maze.util.Vec2;
+import maze.geneticAlgorithm.Chromosome;
+import maze.geneticAlgorithm.GeneticAlgorithm;
+import maze.graphics.Screen;
+import maze.util.Vec2;
 
 public class Maze extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
@@ -28,9 +26,6 @@ public class Maze extends Canvas implements Runnable {
 	public JFrame frame;
 	public static Screen screen;
 	public GeneticAlgorithm game;	
-	public static Mouse mouse;
-	public static Keyboard key;
-	
 	public BufferedImage image;
 	public int[] pixels;
 	
@@ -94,11 +89,7 @@ public class Maze extends Canvas implements Runnable {
 		screen = new Screen(width, height, maze);
 		frame = new JFrame();
 		game = new GeneticAlgorithm(maze, start, end, tressures, width, height, maxChromosomeLength);
-		mouse = new Mouse();
-		addMouseListener(mouse);
-		addMouseMotionListener(mouse);
-		key = new Keyboard();
-		addKeyListener(key);
+		
 	}
 	
 	public void start() {
@@ -149,8 +140,6 @@ public class Maze extends Canvas implements Runnable {
 	
 	public void update() {
 		game.update();
-		mouse.update();
-		key.update();
 		
 		if(game.population.get(0).fitness > bestFitness) {
 			bestFitness = game.population.get(0).fitness;
